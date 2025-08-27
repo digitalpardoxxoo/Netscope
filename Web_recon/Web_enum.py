@@ -29,6 +29,7 @@ def fetch_url(url):
         print(f" Title of Site is: {soup.title.string if soup.title else "no title found "}")
         print("\n")
         print("All links are:\n")
+        
         for link in soup.find_all("a"):
             print(f"{link.get('href')}")
 
