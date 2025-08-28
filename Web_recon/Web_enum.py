@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 url=input("Enter your URL:")
 
 
@@ -21,7 +22,7 @@ def fetch_url(url):
         
         
         if response.status_code!=200:
-          print(status_messages.get(response.status_code,"Dont know wht happened ask google"))
+          print(status_messages.get(response.status_code,"Dont know wht happened man use some other tool"))
           return
         
         soup=BeautifulSoup(response.content,"html.parser")
@@ -46,19 +47,23 @@ fetch_url(url)
 print("\n")
 
 #Function For Directory Fuzzing
-def DirectoryFuzz(url,wordlist):
+def DirectoryFuzz(url):
     print("Finding Directories:\n")
-    with open(wordlist,"r") as f:
-        for line in f:
-            newpath=line.strip()
-            new_url=f"{url}/{newpath}"
+    wordlist=input("Enter file name:")
+    if os.path.exists(wordlist):
+        with open(wordlist,"r") as f:
+            for line in f:
+                newpath=line.strip()
+                new_url=f"{url}/{newpath}"
+                try:
+                    find_dir=requests.get(new_url,timeout=10)
+                    if find_dir.status_code in [200,403]:
+                        print(f"Found:{new_url} , (Status:{find_dir.status_code})")
+                except:
+                    pass
+    else: 
+        print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
-            try:
-                find_dir=requests.get(new_url,timeout=10)
-                if find_dir.status_code in [200,403]:
-                    print(f"Found:{new_url} , (Status:{find_dir.status_code})")
-            except:
-                pass
 
 #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
-DirectoryFuzz(url,"wordlist.txt")
+DirectoryFuzz(url)
