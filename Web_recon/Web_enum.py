@@ -4,7 +4,7 @@ url=input("Enter your URL:")
 
 
 
-
+#Function for Scraping Web content using requests and then beatuifying with beatuifulsoup
 def fetch_url(url):
     try:
         response=requests.get(url,timeout=10)
@@ -43,18 +43,22 @@ def fetch_url(url):
         
 fetch_url(url)
 
+print("\n")
 
+#Function For Directory Fuzzing
 def DirectoryFuzz(url,wordlist):
-    with open("wordlist.txt","r") as f:
+    print("Finding Directories:\n")
+    with open(wordlist,"r") as f:
         for line in f:
             newpath=line.strip()
             new_url=f"{url}/{newpath}"
 
             try:
-                find_dir=requests.get("new_url",timeout=10)
+                find_dir=requests.get(new_url,timeout=10)
                 if find_dir.status_code in [200,403]:
                     print(f"Found:{new_url} , (Status:{find_dir.status_code})")
             except:
                 pass
 
+#You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
 DirectoryFuzz(url,"wordlist.txt")
