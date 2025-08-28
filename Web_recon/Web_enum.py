@@ -57,4 +57,4 @@ def DirectoryFuzz(url,wordlist):
             except:
                 pass
 
-DirectoryFuzz()
+DirectoryFuzz(url,"wordlist.txt")
