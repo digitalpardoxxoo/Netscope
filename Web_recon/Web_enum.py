@@ -55,13 +55,13 @@ def DirectoryFuzz(url):
         with open(wordlist,"r") as f:
             for line in f:
                 newpath=line.strip()
-                new_url=f"{url}/{newpath}"
+                new_url=f"{url.rstrip("/")}/{newpath}"
                 try:
                     find_dir=requests.get(new_url,timeout=10)
                     if find_dir.status_code in [200,403]:
                         print(f"Found:{new_url} , (Status:{find_dir.status_code})")
-                except:
-                    pass
+                except requests.RequestException as e:
+                    print(f"[-] Error with {new_url}: {e}")
     else: 
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
