@@ -47,7 +47,7 @@ fetch_url(url)
 print("\n")
 
 #Function For Directory Fuzzing
-def DirectoryFuzz(url):
+def DirectoryFuzz(url,wordlist):
     #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
     print("Finding Directories:\n")
     wordlist=input("Enter file name:")
@@ -65,4 +65,4 @@ def DirectoryFuzz(url):
     else: 
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
-DirectoryFuzz(url)
+DirectoryFuzz(url,wordlist)
