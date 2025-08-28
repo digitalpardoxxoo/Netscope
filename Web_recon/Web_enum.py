@@ -4,6 +4,7 @@ url=input("Enter your URL:")
 
 
 
+
 def fetch_url(url):
     try:
         response=requests.get(url,timeout=10)
@@ -44,7 +45,7 @@ fetch_url(url)
 
 
 def DirectoryFuzz(url,wordlist):
-    with open("wordlist","r") as f:
+    with open("wordlist.txt","r") as f:
         for line in f:
             newpath=line.strip()
             new_url=f"{url}/{newpath}"
@@ -56,4 +57,4 @@ def DirectoryFuzz(url,wordlist):
             except:
                 pass
 
-
+DirectoryFuzz()
