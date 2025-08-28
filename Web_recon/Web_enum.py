@@ -41,3 +41,19 @@ def fetch_url(url):
         print("Unknown Error occured")
         
 fetch_url(url)
+
+
+def DirectoryFuzz(url,wordlist):
+    with open("wordlist","r") as f:
+        for line in f:
+            newpath=line.strip()
+            new_url=f"{url}/{newpath}"
+
+            try:
+                find_dir=requests.get("new_url",timeout=10)
+                if find_dir.status_code in [200,403]:
+                    print(f"Found:{new_url} , (Status:{find_dir.status_code})")
+            except:
+                pass
+
+
