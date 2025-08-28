@@ -48,6 +48,7 @@ print("\n")
 
 #Function For Directory Fuzzing
 def DirectoryFuzz(url):
+    #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
     print("Finding Directories:\n")
     wordlist=input("Enter file name:")
     if os.path.exists(wordlist):
@@ -64,6 +65,4 @@ def DirectoryFuzz(url):
     else: 
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
-
-#You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
 DirectoryFuzz(url)
