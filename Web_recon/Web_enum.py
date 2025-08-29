@@ -49,7 +49,7 @@ print("\n")
 #Function For Directory Fuzzing
 def DirectoryFuzz(url):
     #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
-    print("Finding Directories:\n")
+    print("Finding Directories....\n")
     wordlist=input("Enter file name:")
     if os.path.exists(wordlist):
         with open(wordlist,"r") as f:
@@ -66,3 +66,26 @@ def DirectoryFuzz(url):
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
 DirectoryFuzz(url)
+
+print("\n")
+
+def Subdomain_enum():
+    a=input("Enter Domain name of Site :")
+    file_to_use=input("Enter file name:")
+    print("Finding possible Subdomains....\n")
+    if os.path.exists(file_to_use):
+        with open(file_to_use,"r") as f:
+            for line in f:
+                sub=line.strip()
+                Subdomain=f"https://{sub}.{a}"
+                try:
+                    req=requests.get(Subdomain,timeout=10)
+                    if req.status_code in [200,404,302,301,403]:
+                        print(f"Found:{Subdomain},(Status:{req.status_code})")
+
+                except:
+                    pass
+    else:
+        print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
+
+Subdomain_enum()
