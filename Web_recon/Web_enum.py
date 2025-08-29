@@ -69,6 +69,7 @@ DirectoryFuzz(url)
 
 print("\n")
 
+#Function for Finding Different SubDomains!
 def Subdomain_enum():
     a=input("Enter Domain name of Site :")
     file_to_use=input("Enter file name:")
