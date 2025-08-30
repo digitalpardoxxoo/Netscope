@@ -1,12 +1,21 @@
 import requests
 from bs4 import BeautifulSoup
 import os
-url=input("Enter your URL:")
 
+print("""
+    Welcome to Web_enumerator !
+    Use the following commands if u need to do web recon!
+      
+    Fuzz-For Directory Fuzzing
+    Crawl-to get data from web 
+    Sub_enum-For Sub-domain Enumeration
+""")
 
+Make_choice=input("Enter Your Command:")
 
 #Function for Scraping Web content using requests and then beatuifying with beatuifulsoup
-def fetch_url(url):
+def fetch_url():
+    url=input("Enter your URL:")
     try:
         response=requests.get(url,timeout=10)
         print(f"Status code : {response.status_code}")
@@ -41,14 +50,11 @@ def fetch_url(url):
         print("Url has no http ot https in it !!")
     except Exception:
         print("Unknown Error occured")
-        
-fetch_url(url)
-
-print("\n")
 
 #Function For Directory Fuzzing
-def DirectoryFuzz(url):
+def DirectoryFuzz():
     #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
+    url=input("Enter your URL:")
     print("Finding Directories....\n")
     wordlist=input("Enter file name:")
     if os.path.exists(wordlist):
@@ -64,10 +70,6 @@ def DirectoryFuzz(url):
                     print(f"[-] Error with {new_url}: {e}")
     else: 
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
-
-DirectoryFuzz(url)
-
-print("\n")
 
 #Function for Finding Different SubDomains!
 def Subdomain_enum():
@@ -89,4 +91,20 @@ def Subdomain_enum():
     else:
         print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
-Subdomain_enum()
+
+switch={
+    "crawl":lambda:fetch_url(),
+    "fuzz":lambda:DirectoryFuzz(),
+    "sub_enum":lambda:Subdomain_enum(),
+}
+switch.get(Make_choice,lambda:print("Invalid Choice"))()
+
+while True:
+    Make_choice=input("To exit use quit or exit:")
+    if Make_choice in ['quit','exit']:
+        break
+    else:
+        Make_choice=input("Enter Your Command:")
+        switch.get(Make_choice,lambda:print("Invalid Choice"))()
+
+
