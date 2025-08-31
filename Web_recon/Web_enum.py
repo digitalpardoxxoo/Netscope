@@ -103,8 +103,8 @@ while True:
     Make_choice=input("To exit use quit or exit:")
     if Make_choice in ['quit','exit']:
         break
-    else:
-        Make_choice=input("Enter Your Command:")
-        switch.get(Make_choice,lambda:print("Invalid Choice"))()
+
+    Make_choice=input("Enter Your Command:")
+    switch.get(Make_choice,lambda:print("Invalid Choice"))()
 
 
