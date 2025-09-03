@@ -19,6 +19,7 @@ def scan(p):
             print(f"Port {p} is closed")
             s.close()
 
+#Added threading for Simultaneous port Scans 
 threads=[]
 for p in port:
     t=threading.Thread(target=scan,args=(p,))
