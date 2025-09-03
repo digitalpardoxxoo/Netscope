@@ -6,9 +6,9 @@ print("""
     Welcome to Web_enumerator !
     Use the following commands if u need to do web recon!
       
-    Fuzz-For Directory Fuzzing
-    Crawl-to get data from web 
-    Sub_enum-For Sub-domain Enumeration
+    fuzz-For Directory Fuzzing
+    crawl-to get data from web 
+    sub_enum-For Sub-domain Enumeration
 """)
 
 Make_choice=input("Enter Your Command:")
