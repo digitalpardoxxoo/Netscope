@@ -5,20 +5,18 @@ port= input("Enter the Ports or Port you wanna scan : ")
 port=port.split(",")
 port= [int(p.strip()) for p in port]
 host=input("Now the Host you want to scan : ")
-
-
+timeout=int(input("Enter Delay before scanning port:"))
 
 def scan(p): 
         try:
             s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             socket.gethostbyname(host)
-            s.settimeout(10)
+            s.settimeout(timeout)
             s.connect((host,p))
             print(f"Port {p} is open")
         except:
-            print(f"Port {p} is closed")
-            s.close()
-
+             print(f"Port {p} is closed")
+             s.close()
 #Added threading for Simultaneous port Scans 
 threads=[]
 for p in port:
@@ -31,6 +29,7 @@ for t in threads:
     t.join()
         
                              
-       
 
 print("All ports are Scanned!")
+
+
