@@ -14,7 +14,6 @@ def scan(p):
             s.settimeout(timeout)
             s.connect((host,p))
             print(f"Port {p} is open ")
-           
             try:
                  s.send(b"GET / HTTP/1.1\r\nHost: " + host.encode() + b"\r\n\r\n")
                  banner=s.recv(2048).decode(errors="ignore")
@@ -25,9 +24,15 @@ def scan(p):
             except:
                  print(f"Port {p} open, but no banner grabbed")
 
-        except :
-             print(f"Port {p} is closed")
-             s.close()
+        except ConnectionRefusedError:
+            print(f"Port {p} is Closed")
+        except socket.timeout:
+            print(f"Port {p} is filtered")
+        except Exception as e:
+            print(f"djdjdj {e}")
+        finally:
+            s.close()
+
 #Added threading for Simultaneous port Scans 
 threads=[]
 for p in port:
