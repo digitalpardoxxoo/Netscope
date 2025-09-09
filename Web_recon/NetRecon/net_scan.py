@@ -1,5 +1,4 @@
 import socket
-import threading 
 from  concurrent.futures import ThreadPoolExecutor
 import ssl
 
@@ -85,6 +84,7 @@ def scan(p):
                 s.close()
             except:
                 pass
+
 #Added threadpool for using segmented ports to save memory for bigger checks
 def scan_chunk(chunk):
     for p in chunk:
@@ -94,7 +94,6 @@ port_chunks=list(chunk_ports(port,5))
 
 with ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(scan_chunk,port_chunks)
-    
 
 print("All ports are Scanned!")
 
