@@ -1,5 +1,6 @@
 import socket
-import threading
+import threading 
+from  concurrent.futures import ThreadPoolExecutor
 import ssl
 
 port= input("Enter the Ports or Port you wanna scan : ")
@@ -7,6 +8,11 @@ port=port.split(",")
 port= [int(p.strip()) for p in port]
 host=input("Now the Host you want to scan : ")
 timeout=int(input("Enter Delay before scanning port:"))
+
+def chunk_ports(port_list,chunk_size):
+    for i in range(0,len(port_list),chunk_size):
+        yield port_list[i: i+chunk_size]
+
 
 def scan(p): 
         try:
@@ -79,18 +85,16 @@ def scan(p):
                 s.close()
             except:
                 pass
-#Added threading for Simultaneous port Scans 
-threads=[]
-for p in port:
-    t=threading.Thread(target=scan,args=(p,))
-    threads.append(t)
-    t.start()
+#Added threadpool for using segmented ports to save memory for bigger checks
+def scan_chunk(chunk):
+    for p in chunk:
+        scan(p)
 
+port_chunks=list(chunk_ports(port,5))
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(scan_chunk,port_chunks)
     
-for t in threads:
-    t.join()
-        
-                             
 
 print("All ports are Scanned!")
 
