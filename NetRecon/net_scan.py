@@ -2,30 +2,23 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 import ssl
 
+class Port_scanner:
+    
+    def __init__(self, host, port, timeout):
+        self.host=host
+        self.port=port
+        self.timeout=timeout
 
+    def chunk_ports(self,chunk_size):
+        for i in range(0, len(self.port), chunk_size):
+            yield self.port[i: i + chunk_size]
 
-while True:
-    try:
-            port = input("Enter the Ports or Port you wanna scan : ")
-            port = port.split(",")
-            port = [int(p.strip()) for p in port]
-            host = input("Now the Host you want to scan : ")
-            timeout = int(input("Enter Delay before scanning port: "))
-
-    except ValueError as e:
-            print("Pls enter the right information")
-            break
-
-    def chunk_ports(port_list, chunk_size):
-        for i in range(0, len(port_list), chunk_size):
-            yield port_list[i: i + chunk_size]
-
-    def scan(p):
+    def scan(self,p):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            socket.gethostbyname(host)
-            s.settimeout(timeout)
-            a = s.connect_ex((host, p))
+            socket.gethostbyname(self.host)
+            s.settimeout(self.timeout)
+            a = s.connect_ex((self.host, p))
 
             if a != 0:
                 print(f"Connect is not possible for port {p}, maybe filtered or closed by firewall")
@@ -39,7 +32,7 @@ while True:
                     if p == 80:
                         req = (
                             'GET / HTTP/1.1\r\n'
-                            f'Host:{host}\r\n'
+                            f'Host:{self.host}\r\n'
                             'User-Agent: SimpleScanner/1.0\r\n'
                             'Connection: close\r\n'
                             '\r\n'
@@ -54,14 +47,14 @@ while True:
                         # making a separate socket with ssl wrapping for a possible ssl/tls handshake to get a banner
                         ssl_sock = context.wrap_socket(
                             socket.socket(socket.AF_INET, socket.SOCK_STREAM),
-                            server_hostname=host
+                            server_hostname=self.host
                         )
-                        ssl_sock.connect((host, p))
+                        ssl_sock.connect((self.host, p))
                         print(f"Port {p} is open (HTTPS)")
 
                         req = (
                             'GET / HTTP/1.1\r\n'
-                            f'Host:{host}\r\n'
+                            f'Host:{self.host}\r\n'
                             'User-Agent: SimpleScanner/1.0\r\n'
                             'Connection: close\r\n'
                             '\r\n'
@@ -99,13 +92,13 @@ while True:
                 pass
 
     # Added threadpool for using segmented ports to save memory for bigger checks
-    def scan_chunk(chunk):
+    def scan_chunk(self,chunk):
         for p in chunk:
-            scan(p)
+            self.scan(p)
 
-    port_chunks = list(chunk_ports(port, 5))
+    def run(self,chunk_size=5,max_workers=4):
+        port_chunks = list(self.chunk_ports(chunk_size=chunk_size))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+           executor.map(self.scan_chunk, port_chunks)
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.map(scan_chunk, port_chunks)
-
-    print("All ports are Scanned!")
+        print("All ports are Scanned!")
