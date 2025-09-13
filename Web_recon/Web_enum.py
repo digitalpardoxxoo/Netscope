@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-print("""
-    Welcome to Web_enumerator !
+class Web_rec:
+    print("""
     Use the following commands if u need to do web recon!
       
     fuzz-For Directory Fuzzing
@@ -101,7 +101,7 @@ switch.get(Make_choice,lambda:print("Invalid Choice"))()
 
 while True:
     Make_choice=input("To exit use quit or exit:")
-    if Make_choice in ['quit','exit']:
+    if Make_choice in ['quit','exit','Exit','Quit']:
         break
 
     Make_choice=input("Enter Your Command:")
