@@ -3,108 +3,77 @@ from bs4 import BeautifulSoup
 import os
 
 class Web_rec:
-    print("""
-    Use the following commands if u need to do web recon!
-      
-    fuzz-For Directory Fuzzing
-    crawl-to get data from web 
-    sub_enum-For Sub-domain Enumeration
-""")
+    def __init__(self, url, Domain=None, file_to_use=None):
+        self.url = url
+        self.Domain = Domain
+        self.file_to_use = file_to_use
 
-Make_choice=input("Enter Your Command:")
+    # Function for Scraping Web content using requests and then beatuifying with beatuifulsoup
+    def fetch_url(self, url):
+        try:
+            response = requests.get(url, timeout=10)
+            print(f"Status code : {response.status_code}")
 
-#Function for Scraping Web content using requests and then beatuifying with beatuifulsoup
-def fetch_url():
-    url=input("Enter your URL:")
-    try:
-        response=requests.get(url,timeout=10)
-        print(f"Status code : {response.status_code}")
-        status_messages = {
-            200: "Success! Page fetched successfully.",
-            301: "Redirected permanently.",
-            302: "Redirected temporarily.",
-            403: "Forbidden! You don't have permission to access this page.",
-            404: "Not Found! Invalid URL.",
-            500: "Internal Server Error on the site.",
-            503: "Service Unavailable. Try again later."
-         }
-        
-        
-        if response.status_code!=200:
-          print(status_messages.get(response.status_code,"Dont know wht happened man use some other tool"))
-          return
-        
-        soup=BeautifulSoup(response.content,"html.parser")
-        print(f" Site content:\n{soup.prettify()[:1000]}")
-        print("\n")
-        print(f" Title of Site is: {soup.title.string if soup.title else "no title found "}")
-        print("\n")
-        print("All links are:\n")
-        
-        for link in soup.find_all("a"):
-            print(f"{link.get('href')}")
+            status_messages = {
+                200: "Success! Page fetched successfully.",
+                301: "Redirected permanently.",
+                302: "Redirected temporarily.",
+                403: "Forbidden! You don't have permission to access this page.",
+                404: "Not Found! Invalid URL.",
+                500: "Internal Server Error on the site.",
+                503: "Service Unavailable. Try again later."
+            }
 
-    except requests.exceptions.ConnectionError:
-        print("Error has Occured While Connecting to the URL")
-    except requests.exceptions.MissingSchema:
-        print("Url has no http ot https in it !!")
-    except Exception:
-        print("Unknown Error occured")
+            if response.status_code != 200:
+                print(status_messages.get(response.status_code, "Dont know wht happened man use some other tool"))
+                return
 
-#Function For Directory Fuzzing
-def DirectoryFuzz():
-    #You should first navigate to the same path as the wordlist.txt file before trying to run the tool for directory fuzzing 
-    url=input("Enter your URL:")
-    print("Finding Directories....\n")
-    wordlist=input("Enter file name:")
-    if os.path.exists(wordlist):
-        with open(wordlist,"r") as f:
-            for line in f:
-                newpath=line.strip()
-                new_url=f"{url.rstrip("/")}/{newpath}"
-                try:
-                    find_dir=requests.get(new_url,timeout=10)
-                    if find_dir.status_code in [200,403]:
-                        print(f"Found:{new_url} , (Status:{find_dir.status_code})")
-                except requests.RequestException as e:
-                    print(f"[-] Error with {new_url}: {e}")
-    else: 
-        print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
+            soup = BeautifulSoup(response.content, "html.parser")
+            print(f" Site content:\n{soup.prettify()[:1000]}")
+            print("\n")
+            print(f" Title of Site is: {soup.title.string if soup.title else 'no title found '}")
+            print("\n")
+            print("All links are:\n")
 
-#Function for Finding Different SubDomains!
-def Subdomain_enum():
-    a=input("Enter Domain name of Site :")
-    file_to_use=input("Enter file name:")
-    print("Finding possible Subdomains....\n")
-    if os.path.exists(file_to_use):
-        with open(file_to_use,"r") as f:
-            for line in f:
-                sub=line.strip()
-                Subdomain=f"https://{sub}.{a}"
-                try:
-                    req=requests.get(Subdomain,timeout=10)
-                    if req.status_code in [200,404,302,301,403]:
-                        print(f"Found:{Subdomain},(Status:{req.status_code})")
+            for link in soup.find_all("a"):
+                print(f"{link.get('href')}")
 
-                except:
-                    pass
-    else:
-        print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
+        except requests.exceptions.ConnectionError:
+            print("Error has Occured While Connecting to the URL")
+        except requests.exceptions.MissingSchema:
+            print("Url has no http ot https in it !!")
+        except Exception:
+            print("Unknown Error occured")
 
+    # Function For Directory Fuzzing
+    def DirectoryFuzz(self, url, file_to_use):
+        if os.path.exists(file_to_use):
+            with open(file_to_use, "r") as f:
+                for line in f:
+                    newpath = line.strip()
+                    new_url = f"{url.rstrip('/')}/{newpath}"
+                    try:
+                        find_dir = requests.get(new_url, timeout=10)
+                        if find_dir.status_code in [200, 403]:
+                            print(f"Found:{new_url} , (Status:{find_dir.status_code})")
+                    except requests.RequestException as e:
+                        print(f"[-] Error with {new_url}: {e}")
+        else:
+            print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
-switch={
-    "crawl":lambda:fetch_url(),
-    "fuzz":lambda:DirectoryFuzz(),
-    "sub_enum":lambda:Subdomain_enum(),
-}
-switch.get(Make_choice,lambda:print("Invalid Choice"))()
-
-while True:
-    Make_choice=input("To exit use quit or exit:")
-    if Make_choice in ['quit','exit','Exit','Quit']:
-        break
-
-    Make_choice=input("Enter Your Command:")
-    switch.get(Make_choice,lambda:print("Invalid Choice"))()
-
+    # Function for Finding Different SubDomains!
+    def Subdomain_enum(self,Domain,file_to_use):
+        if os.path.exists(file_to_use):
+            with open(file_to_use, "r") as f:
+                for line in f:
+                    sub = line.strip()
+                    Subdomain = f"https://{sub}.{Domain}"
+                    try:
+                        req = requests.get(Subdomain, timeout=10)
+                        if req.status_code in [200, 404, 302, 301, 403]:
+                            print(f"Found:{Subdomain},(Status:{req.status_code})")
+                    except:
+                        pass
+        else:
+            print("Navigate to the required path Since your file wasn't found here or mayber try changing the name")
 
