@@ -13,8 +13,6 @@ It focuses on fast, actionable results and gives you flexible proxy automation s
 
 ---
 
-- [Quick setup](#quick-setup)
-
 ---
 
 ## Quick setup
@@ -28,4 +26,5 @@ python -m venv .venv
 source .venv/bin/activate      # Linux / macOS
 # .venv\Scripts\Activate.ps1   # Windows PowerShell
 pip install -r requirements.txt
+
 
