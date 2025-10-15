@@ -13,17 +13,7 @@ It focuses on fast, actionable results and gives you flexible proxy automation s
 
 ---
 
-## Table of contents
 - [Quick setup](#quick-setup)
-- [Requirements](#requirements)
-- [Quickstart](#quickstart)
-- [How to use proxy automation (full code snippets)](#how-to-use-proxy-automation-full-code-snippets)
-  - [ProxyManager (proxy_manager.py)](#proxymanager-proxy_managerpy)
-  - [Main integration (`main.py`) — proxy flow](#main-integration-mainpy---proxy-flow)
-  - [NetRecon/net_scan.py — scanner notes](#netreconnet_scanpy---scanner-notes)
-- [Manual PROXIES list example](#manual-proxies-list-example)
-- [Tips, debug & safety](#tips-debug--safety)
-- [Contributing & license](#contributing--license)
 
 ---
 
@@ -38,3 +28,4 @@ python -m venv .venv
 source .venv/bin/activate      # Linux / macOS
 # .venv\Scripts\Activate.ps1   # Windows PowerShell
 pip install -r requirements.txt
+
